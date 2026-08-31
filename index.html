@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoData Test Lab - Portal de Testes de Automação & Cadastro</title>
+  <meta name="description" content="Site de testes para automação de cadastros, robôs RPA, Selenium, Playwright e testes de QA.">
+  <!-- Fonts Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Icon Font (Phosphor Icons) -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Background Decorative Ambient Glows -->
+  <div class="bg-glow glow-1"></div>
+  <div class="bg-glow glow-2"></div>
+
+  <!-- Top Notification Toast Bar -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- =================================================================== -->
+  <!-- 1. TELA DE LOGIN (TELA INICIAL)                                     -->
+  <!-- =================================================================== -->
+  <section id="screen-login" class="screen active">
+    <div class="login-wrapper">
+      <div class="login-card glass-card">
+        <div class="brand-header">
+          <div class="brand-logo">
+            <i class="ph ph-robot"></i>
+          </div>
+          <h1>AutoData <span>Test Lab</span></h1>
+          <p class="subtitle">Ambiente simulado para testes de automação, QA e robôs RPA</p>
+        </div>
+
+        <div class="automation-badge">
+          <i class="ph ph-lightning"></i>
+          <span>Pronto para Selenium, Playwright & PyAutoGUI</span>
+        </div>
+
+        <form id="form-login" onsubmit="return false;">
+          <div class="form-group">
+            <label for="login-usuario">
+              <i class="ph ph-user"></i> Usuário ou E-mail
+            </label>
+            <input 
+              type="text" 
+              id="login-usuario" 
+              name="login_usuario" 
+              placeholder="Digite seu usuário (Ex: admin)" 
+              autocomplete="username"
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="login-senha">
+              <i class="ph ph-lock-key"></i> Senha
+            </label>
+            <div class="input-password-wrapper">
+              <input 
+                type="password" 
+                id="login-senha" 
+                name="login_senha" 
+                placeholder="Digite sua senha (Ex: 123456)" 
+                autocomplete="current-password"
+                required
+              >
+              <button type="button" class="btn-toggle-pass" id="btn-toggle-password" title="Mostrar/ocultar senha">
+                <i class="ph ph-eye" id="icon-toggle-pass"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-options">
+            <label class="custom-checkbox">
+              <input type="checkbox" id="login-lembrar" name="lembrar_me" checked>
+              <span class="checkmark"></span>
+              Lembrar credenciais
+            </label>
+            <a href="#" id="link-esqueci-senha" onclick="alert('Credenciais padrão para teste: \nUsuário: admin \nSenha: 123456'); return false;">Esqueceu a senha?</a>
+          </div>
+
+          <div class="login-actions">
+            <button type="submit" id="btn-login-submit" class="btn btn-primary btn-block">
+              <span>Entrar no Sistema</span>
+              <i class="ph ph-arrow-right"></i>
+            </button>
+
+            <button type="button" id="btn-autofill-login" class="btn btn-secondary btn-block">
+              <i class="ph ph-magic-wand"></i>
+              <span>Preencher Login de Teste</span>
+            </button>
+          </div>
+        </form>
+
+        <div class="login-footer">
+          <p><i class="ph ph-info"></i> Dica de Teste: Aceita qualquer login ou use <code>admin</code> / <code>123456</code></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================== -->
+  <!-- 2. DASHBOARD & FICHA CADASTRAL                                     -->
+  <!-- =================================================================== -->
+  <section id="screen-dashboard" class="screen">
+    <!-- Navbar Header -->
+    <header class="app-header">
+      <div class="header-container">
+        <div class="brand">
+          <i class="ph ph-robot brand-icon"></i>
+          <div>
+            <h2>AutoData <span>Test Lab</span></h2>
+            <small>Ficha Cadastral Completa para Automação</small>
+          </div>
+        </div>
+
+        <div class="header-controls">
+          <div class="user-status-pill">
+            <span class="status-dot online"></span>
+            <span id="user-display-name">Operador Teste</span>
+          </div>
+
+          <button id="btn-cheat-sheet" class="btn btn-icon btn-glass" title="Ver IDs dos campos para Python">
+            <i class="ph ph-code"></i>
+            <span>Guia de IDs</span>
+          </button>
+
+          <button id="btn-theme-toggle" class="btn btn-icon btn-glass" title="Alternar Tema">
+            <i class="ph ph-moon" id="theme-icon"></i>
+          </button>
+
+          <button id="btn-logout" class="btn btn-danger-outline btn-sm">
+            <i class="ph ph-sign-out"></i>
+            <span>Sair</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="main-content container">
+      <!-- Quick Test Action Banner -->
+      <div class="test-tools-bar glass-card">
+        <div class="tools-info">
+          <i class="ph ph-sparkle text-gradient"></i>
+          <div>
+            <h3>Ferramentas para Automação de Testes</h3>
+            <p>Utilize os botões abaixo para preencher instantaneamente com dados fakes válidos ou limpar a ficha.</p>
+          </div>
+        </div>
+        <div class="tools-actions">
+          <button id="btn-fill-fake-data" class="btn btn-accent">
+            <i class="ph ph-lightning"></i>
+            <span>Gerar & Preencher Dados Fakes</span>
+          </button>
+          <button id="btn-clear-form" class="btn btn-ghost">
+            <i class="ph ph-arrows-counter-clockwise"></i>
+            <span>Limpar Formulário</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs (Ficha Cadastral / Lista de Registros) -->
+      <div class="tab-navigation">
+        <button class="tab-btn active" data-tab="tab-cadastro" id="tab-btn-cadastro">
+          <i class="ph ph-user-plus"></i>
+          <span>Ficha de Cadastro</span>
+        </button>
+        <button class="tab-btn" data-tab="tab-registros" id="tab-btn-registros">
+          <i class="ph ph-database"></i>
+          <span>Registros Salvos</span>
+          <span class="badge" id="records-count">0</span>
+        </button>
+      </div>
+
+      <!-- Tab 1: Ficha de Cadastro -->
+      <div id="tab-cadastro" class="tab-content active">
+        <form id="form-cadastro" onsubmit="return false;" novalidate>
+          
+          <!-- Seção 1: Dados Pessoais -->
+          <div class="form-section glass-card">
+            <div class="section-title">
+              <i class="ph ph-identification-card"></i>
+              <div>
+                <h3>1. Dados Pessoais</h3>
+                <small>Informações básicas de identificação do indivíduo</small>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <!-- Nome Completo -->
+              <div class="form-group col-span-2">
+                <label for="nome_completo">Nome Completo <span class="required">*</span></label>
+                <input type="text" id="nome_completo" name="nome_completo" placeholder="Ex: Carlos Eduardo da Silva" required>
+                <span class="field-hint">ID: <code>#nome_completo</code></span>
+              </div>
+
+              <!-- CPF -->
+              <div class="form-group">
+                <label for="cpf">CPF <span class="required">*</span></label>
+                <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" maxlength="14" required>
+                <span class="field-hint">ID: <code>#cpf</code></span>
+              </div>
+
+              <!-- RG -->
+              <div class="form-group">
+                <label for="rg">RG / Documento</label>
+                <input type="text" id="rg" name="rg" placeholder="00.000.000-0" maxlength="12">
+                <span class="field-hint">ID: <code>#rg</code></span>
+              </div>
+
+              <!-- Data de Nascimento -->
+              <div class="form-group">
+                <label for="data_nascimento">Data de Nascimento <span class="required">*</span></label>
+                <input type="date" id="data_nascimento" name="data_nascimento" required>
+                <span class="field-hint">ID: <code>#data_nascimento</code></span>
+              </div>
+
+              <!-- Gênero -->
+              <div class="form-group">
+                <label for="genero">Gênero <span class="required">*</span></label>
+                <select id="genero" name="genero" required>
+                  <option value="" disabled selected>Selecione...</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Feminino">Feminino</option>
+                  <option value="Outro">Outro</option>
+                  <option value="Prefiro não informar">Prefiro não informar</option>
+                </select>
+                <span class="field-hint">ID: <code>#genero</code></span>
+              </div>
+
+              <!-- Nome da Mãe -->
+              <div class="form-group col-span-2">
+                <label for="nome_mae">Nome Completo da Mãe</label>
+                <input type="text" id="nome_mae" name="nome_mae" placeholder="Ex: Maria Aparecida da Silva">
+                <span class="field-hint">ID: <code>#nome_mae</code></span>
+              </div>
+
+              <!-- Estado Civil (Radios) -->
+              <div class="form-group col-span-2">
+                <label>Estado Civil <span class="required">*</span></label>
+                <div class="radio-group" id="group-estado-civil">
+                  <label class="custom-radio">
+                    <input type="radio" name="estado_civil" id="estado_civil_solteiro" value="Solteiro(a)" checked>
+                    <span class="radio-mark"></span>
+                    Solteiro(a)
+                  </label>
+                  <label class="custom-radio">
+                    <input type="radio" name="estado_civil" id="estado_civil_casado" value="Casado(a)">
+                    <span class="radio-mark"></span>
+                    Casado(a)
+                  </label>
+                  <label class="custom-radio">
+                    <input type="radio" name="estado_civil" id="estado_civil_divorciado" value="Divorciado(a)">
+                    <span class="radio-mark"></span>
+                    Divorciado(a)
+                  </label>
+                  <label class="custom-radio">
+                    <input type="radio" name="estado_civil" id="estado_civil_viuvo" value="Viúvo(a)">
+                    <span class="radio-mark"></span>
+                    Viúvo(a)
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seção 2: Contato & Comunicação -->
+          <div class="form-section glass-card">
+            <div class="section-title">
+              <i class="ph ph-envelope-simple-open"></i>
+              <div>
+                <h3>2. Contato & Comunicação</h3>
+                <small>Canais diretos para contato e notificações</small>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <!-- E-mail -->
+              <div class="form-group col-span-2">
+                <label for="email">E-mail Principal <span class="required">*</span></label>
+                <input type="email" id="email" name="email" placeholder="carlos.silva@exemplo.com" required>
+                <span class="field-hint">ID: <code>#email</code></span>
+              </div>
+
+              <!-- Telefone Celular -->
+              <div class="form-group">
+                <label for="telefone">Telefone Celular <span class="required">*</span></label>
+                <input type="tel" id="telefone" name="telefone" placeholder="(11) 98765-4321" maxlength="15" required>
+                <span class="field-hint">ID: <code>#telefone</code></span>
+              </div>
+
+              <!-- Canal Preferencial -->
+              <div class="form-group">
+                <label for="canal_preferencial">Canal Preferencial</label>
+                <select id="canal_preferencial" name="canal_preferencial">
+                  <option value="WhatsApp">WhatsApp</option>
+                  <option value="E-mail">E-mail</option>
+                  <option value="Ligação Telefônica">Ligação Telefônica</option>
+                  <option value="SMS">SMS</option>
+                </select>
+                <span class="field-hint">ID: <code>#canal_preferencial</code></span>
+              </div>
+
+              <!-- Toggles de Notificação -->
+              <div class="form-group col-span-2 flex-toggles">
+                <label class="custom-switch">
+                  <input type="checkbox" id="has_whatsapp" name="has_whatsapp" checked>
+                  <span class="switch-slider"></span>
+                  <span class="switch-label">Número possui WhatsApp Ativo</span>
+                </label>
+
+                <label class="custom-switch">
+                  <input type="checkbox" id="notificacoes_email" name="notificacoes_email" checked>
+                  <span class="switch-slider"></span>
+                  <span class="switch-label">Receber novidades por E-mail</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seção 3: Endereço Residencial -->
+          <div class="form-section glass-card">
+            <div class="section-title">
+              <i class="ph ph-map-pin"></i>
+              <div>
+                <h3>3. Endereço Residencial</h3>
+                <small>Localização física para correspondência</small>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <!-- CEP -->
+              <div class="form-group">
+                <label for="cep">CEP <span class="required">*</span></label>
+                <div class="input-with-button">
+                  <input type="text" id="cep" name="cep" placeholder="01001-000" maxlength="9" required>
+                  <button type="button" id="btn-buscar-cep" class="btn btn-secondary btn-icon-only" title="Simular busca de CEP">
+                    <i class="ph ph-magnifying-glass"></i>
+                  </button>
+                </div>
+                <span class="field-hint">ID: <code>#cep</code></span>
+              </div>
+
+              <!-- Logradouro -->
+              <div class="form-group col-span-2">
+                <label for="logradouro">Logradouro / Rua <span class="required">*</span></label>
+                <input type="text" id="logradouro" name="logradouro" placeholder="Ex: Avenida Paulista" required>
+                <span class="field-hint">ID: <code>#logradouro</code></span>
+              </div>
+
+              <!-- Número -->
+              <div class="form-group">
+                <label for="numero">Número <span class="required">*</span></label>
+                <input type="text" id="numero" name="numero" placeholder="1000" required>
+                <span class="field-hint">ID: <code>#numero</code></span>
+              </div>
+
+              <!-- Complemento -->
+              <div class="form-group">
+                <label for="complemento">Complemento</label>
+                <input type="text" id="complemento" name="complemento" placeholder="Apto 42 / Bloco B">
+                <span class="field-hint">ID: <code>#complemento</code></span>
+              </div>
+
+              <!-- Bairro -->
+              <div class="form-group">
+                <label for="bairro">Bairro <span class="required">*</span></label>
+                <input type="text" id="bairro" name="bairro" placeholder="Bela Vista" required>
+                <span class="field-hint">ID: <code>#bairro</code></span>
+              </div>
+
+              <!-- Cidade -->
+              <div class="form-group">
+                <label for="cidade">Cidade <span class="required">*</span></label>
+                <input type="text" id="cidade" name="cidade" placeholder="São Paulo" required>
+                <span class="field-hint">ID: <code>#cidade</code></span>
+              </div>
+
+              <!-- Estado (UF) -->
+              <div class="form-group">
+                <label for="estado">Estado (UF) <span class="required">*</span></label>
+                <select id="estado" name="estado" required>
+                  <option value="" disabled selected>UF...</option>
+                  <option value="AC">AC - Acre</option>
+                  <option value="AL">AL - Alagoas</option>
+                  <option value="AP">AP - Amapá</option>
+                  <option value="AM">AM - Amazonas</option>
+                  <option value="BA">BA - Bahia</option>
+                  <option value="CE">CE - Ceará</option>
+                  <option value="DF">DF - Distrito Federal</option>
+                  <option value="ES">ES - Espírito Santo</option>
+                  <option value="GO">GO - Goiás</option>
+                  <option value="MA">MA - Maranhão</option>
+                  <option value="MT">MT - Mato Grosso</option>
+                  <option value="MS">MS - Mato Grosso do Sul</option>
+                  <option value="MG">MG - Minas Gerais</option>
+                  <option value="PA">PA - Pará</option>
+                  <option value="PB">PB - Paraíba</option>
+                  <option value="PR">PR - Paraná</option>
+                  <option value="PE">PE - Pernambuco</option>
+                  <option value="PI">PI - Piauí</option>
+                  <option value="RJ">RJ - Rio de Janeiro</option>
+                  <option value="RN">RN - Rio Grande do Norte</option>
+                  <option value="RS">RS - Rio Grande do Sul</option>
+                  <option value="RO">RO - Rondônia</option>
+                  <option value="RR">RR - Roraima</option>
+                  <option value="SC">SC - Santa Catarina</option>
+                  <option value="SP">SP - São Paulo</option>
+                  <option value="SE">SE - Sergipe</option>
+                  <option value="TO">TO - Tocantins</option>
+                </select>
+                <span class="field-hint">ID: <code>#estado</code></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seção 4: Dados Profissionais & Financeiros -->
+          <div class="form-section glass-card">
+            <div class="section-title">
+              <i class="ph ph-briefcase"></i>
+              <div>
+                <h3>4. Dados Profissionais e Financeiros</h3>
+                <small>Informações ocupacionais e capacidade financeira</small>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <!-- Cargo / Profissão -->
+              <div class="form-group">
+                <label for="cargo">Cargo / Ocupação <span class="required">*</span></label>
+                <input type="text" id="cargo" name="cargo" placeholder="Ex: Desenvolvedor Fullstack" required>
+                <span class="field-hint">ID: <code>#cargo</code></span>
+              </div>
+
+              <!-- Empresa -->
+              <div class="form-group">
+                <label for="empresa">Empresa Atual</label>
+                <input type="text" id="empresa" name="empresa" placeholder="Ex: Tech Solutions Ltda">
+                <span class="field-hint">ID: <code>#empresa</code></span>
+              </div>
+
+              <!-- Escolaridade -->
+              <div class="form-group">
+                <label for="escolaridade">Escolaridade <span class="required">*</span></label>
+                <select id="escolaridade" name="escolaridade" required>
+                  <option value="" disabled selected>Selecione...</option>
+                  <option value="Ensino Fundamental">Ensino Fundamental</option>
+                  <option value="Ensino Médio">Ensino Médio</option>
+                  <option value="Ensino Superior Incompleto">Ensino Superior Incompleto</option>
+                  <option value="Ensino Superior Completo">Ensino Superior Completo</option>
+                  <option value="Pós-Graduação / Mestrado / Doutorado">Pós-Graduação / Mestrado / Doutorado</option>
+                </select>
+                <span class="field-hint">ID: <code>#escolaridade</code></span>
+              </div>
+
+              <!-- Renda Mensal -->
+              <div class="form-group">
+                <label for="renda_mensal">
+                  Renda Mensal Estimada: <strong id="renda_display" class="text-accent">R$ 5.500,00</strong>
+                </label>
+                <input type="range" id="renda_mensal" name="renda_mensal" min="1320" max="30000" step="500" value="5500">
+                <span class="field-hint">ID: <code>#renda_mensal</code></span>
+              </div>
+
+              <!-- Possui Veículo -->
+              <div class="form-group col-span-2 flex-toggles">
+                <label class="custom-switch">
+                  <input type="checkbox" id="possui_veiculo" name="possui_veiculo" checked>
+                  <span class="switch-slider"></span>
+                  <span class="switch-label">Possui Veículo Próprio (Carro/Moto)</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seção 5: Plano & Preferências de Conta -->
+          <div class="form-section glass-card">
+            <div class="section-title">
+              <i class="ph ph-sliders font-bold"></i>
+              <div>
+                <h3>5. Plano & Configurações de Cadastro</h3>
+                <small>Escolha o nível de acesso e envie arquivos de comprovação</small>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <!-- Radio Cards de Plano -->
+              <div class="form-group col-span-2">
+                <label>Plano Escolhido <span class="required">*</span></label>
+                <div class="plan-cards-grid">
+                  <label class="plan-card">
+                    <input type="radio" name="plano_categoria" id="plano_basico" value="Básico" checked>
+                    <div class="plan-card-content">
+                      <i class="ph ph-paper-plane-tilt"></i>
+                      <h4>Plano Básico</h4>
+                      <p>Acesso essencial para automação simples</p>
+                      <span class="price">Gratuito</span>
+                    </div>
+                  </label>
+
+                  <label class="plan-card">
+                    <input type="radio" name="plano_categoria" id="plano_pro" value="Profissional">
+                    <div class="plan-card-content">
+                      <i class="ph ph-rocket-launch"></i>
+                      <h4>Plano Pro</h4>
+                      <p>Recursos avançados para testes frequentes</p>
+                      <span class="price">R$ 49/mês</span>
+                    </div>
+                  </label>
+
+                  <label class="plan-card">
+                    <input type="radio" name="plano_categoria" id="plano_enterprise" value="Enterprise">
+                    <div class="plan-card-content">
+                      <i class="ph ph-crown"></i>
+                      <h4>Enterprise</h4>
+                      <p>Sem limites de requisições e suporte 24/7</p>
+                      <span class="price">R$ 199/mês</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Upload de Comprovante / Documento -->
+              <div class="form-group col-span-2">
+                <label for="upload_documento">Upload de Comprovante (PDF, JPG, PNG)</label>
+                <div class="file-upload-box" id="drop-zone">
+                  <input type="file" id="upload_documento" name="upload_documento" accept=".pdf,.png,.jpg,.jpeg">
+                  <i class="ph ph-cloud-arrow-up"></i>
+                  <p id="file-label-text">Clique para selecionar ou arraste o arquivo aqui</p>
+                  <small id="file-name-selected" class="text-muted"></small>
+                </div>
+                <span class="field-hint">ID: <code>#upload_documento</code></span>
+              </div>
+
+              <!-- Observações -->
+              <div class="form-group col-span-2">
+                <label for="observacoes">Observações ou Anotações de Teste</label>
+                <textarea id="observacoes" name="observacoes" rows="3" placeholder="Insira informações adicionais de teste aqui..."></textarea>
+                <span class="field-hint">ID: <code>#observacoes</code></span>
+              </div>
+
+              <!-- Aceitar Termos -->
+              <div class="form-group col-span-2">
+                <label class="custom-checkbox highlight">
+                  <input type="checkbox" id="aceita_termos" name="aceita_termos" required>
+                  <span class="checkmark"></span>
+                  Li e concordo com os Termos de Uso do Ambiente de Teste <span class="required">*</span>
+                </label>
+                <span class="field-hint">ID: <code>#aceita_termos</code></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Floating Submit Bar -->
+          <div class="form-actions-bar glass-card">
+            <div class="actions-status">
+              <span id="form-validation-status"><i class="ph ph-info"></i> Preencha os campos obrigatórios (*)</span>
+            </div>
+            <div class="actions-buttons">
+              <button type="button" id="btn-reset-form-bottom" class="btn btn-ghost">
+                Limpar
+              </button>
+              <button type="submit" id="btn-cadastrar" class="btn btn-primary btn-lg">
+                <i class="ph ph-check-circle"></i>
+                <span>Finalizar Cadastro</span>
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Tab 2: Registros Salvos -->
+      <div id="tab-registros" class="tab-content">
+        <div class="records-container glass-card">
+          <div class="records-header">
+            <div>
+              <h3><i class="ph ph-database"></i> Registros de Teste Cadastrados</h3>
+              <p>Histórico dos formulários enviados com sucesso durante sua sessão de teste.</p>
+            </div>
+            <div class="records-actions">
+              <button id="btn-export-csv" class="btn btn-secondary btn-sm">
+                <i class="ph ph-download-simple"></i>
+                <span>Exportar CSV</span>
+              </button>
+              <button id="btn-export-json" class="btn btn-secondary btn-sm">
+                <i class="ph ph-file-code"></i>
+                <span>Exportar JSON</span>
+              </button>
+              <button id="btn-clear-records" class="btn btn-danger-outline btn-sm">
+                <i class="ph ph-trash"></i>
+                <span>Apagar Todos</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="records-table" id="table-records">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nome Completo</th>
+                  <th>CPF</th>
+                  <th>E-mail</th>
+                  <th>Telefone</th>
+                  <th>Cidade / UF</th>
+                  <th>Plano</th>
+                  <th>Data Registro</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="records-tbody">
+                <!-- Records injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <div id="empty-records-msg" class="empty-state">
+            <i class="ph ph-folder-open"></i>
+            <h4>Nenhum registro encontrado</h4>
+            <p>Envie a ficha cadastral para visualizar os dados salvos aqui.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="app-footer">
+      <div class="container footer-content">
+        <p>AutoData Test Lab &copy; 2026 - Desenvolvido para Testes de Automação, QA & Robôs RPA.</p>
+        <p class="tech-stack"><i class="ph ph-code-block"></i> IDs Únicos em todos os inputs para <code>driver.find_element(By.ID, '...')</code></p>
+      </div>
+    </footer>
+  </section>
+
+  <!-- =================================================================== -->
+  <!-- MODAL: GUIA DE IDs PARA AUTOMAÇÃO PYTHON / SELENIUM                -->
+  <!-- =================================================================== -->
+  <div id="modal-cheat-sheet" class="modal-backdrop">
+    <div class="modal-content glass-card">
+      <div class="modal-header">
+        <h3><i class="ph ph-code"></i> Guia de IDs dos Elementos (Cheat Sheet)</h3>
+        <button id="btn-close-modal" class="btn-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Abaixo estão os IDs para copiar e usar direto no seu script Python (Selenium / Playwright):</p>
+        
+        <div class="code-snippets">
+          <div class="snippet-header">Exemplo em Python (Selenium):</div>
+          <pre><code>from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get("http://localhost:5500") # Ou caminho local do index.html
+
+# Login
+driver.find_element(By.ID, "login-usuario").send_keys("admin")
+driver.find_element(By.ID, "login-senha").send_keys("123456")
+driver.find_element(By.ID, "btn-login-submit").click()
+
+# Preencher Cadastro
+driver.find_element(By.ID, "nome_completo").send_keys("Carlos Silva")
+driver.find_element(By.ID, "cpf").send_keys("123.456.789-00")
+driver.find_element(By.ID, "email").send_keys("carlos@teste.com")
+driver.find_element(By.ID, "btn-cadastrar").click()</code></pre>
+        </div>
+
+        <div class="ids-table-wrapper">
+          <table class="ids-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Tipo</th>
+                <th>Seletor ID</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Usuário Login</td><td><code>input</code></td><td><code>#login-usuario</code></td></tr>
+              <tr><td>Senha Login</td><td><code>input</code></td><td><code>#login-senha</code></td></tr>
+              <tr><td>Botão Entrar</td><td><code>button</code></td><td><code>#btn-login-submit</code></td></tr>
+              <tr><td>Nome Completo</td><td><code>input</code></td><td><code>#nome_completo</code></td></tr>
+              <tr><td>CPF</td><td><code>input</code></td><td><code>#cpf</code></td></tr>
+              <tr><td>RG</td><td><code>input</code></td><td><code>#rg</code></td></tr>
+              <tr><td>Data Nascimento</td><td><code>input[date]</code></td><td><code>#data_nascimento</code></td></tr>
+              <tr><td>Gênero</td><td><code>select</code></td><td><code>#genero</code></td></tr>
+              <tr><td>E-mail</td><td><code>input[email]</code></td><td><code>#email</code></td></tr>
+              <tr><td>Telefone</td><td><code>input[tel]</code></td><td><code>#telefone</code></td></tr>
+              <tr><td>CEP</td><td><code>input</code></td><td><code>#cep</code></td></tr>
+              <tr><td>Logradouro</td><td><code>input</code></td><td><code>#logradouro</code></td></tr>
+              <tr><td>Número</td><td><code>input</code></td><td><code>#numero</code></td></tr>
+              <tr><td>Bairro</td><td><code>input</code></td><td><code>#bairro</code></td></tr>
+              <tr><td>Cidade</td><td><code>input</code></td><td><code>#cidade</code></td></tr>
+              <tr><td>Estado (UF)</td><td><code>select</code></td><td><code>#estado</code></td></tr>
+              <tr><td>Cargo</td><td><code>input</code></td><td><code>#cargo</code></td></tr>
+              <tr><td>Empresa</td><td><code>input</code></td><td><code>#empresa</code></td></tr>
+              <tr><td>Escolaridade</td><td><code>select</code></td><td><code>#escolaridade</code></td></tr>
+              <tr><td>Renda Mensal</td><td><code>input[range]</code></td><td><code>#renda_mensal</code></td></tr>
+              <tr><td>Plano Básico</td><td><code>radio</code></td><td><code>#plano_basico</code></td></tr>
+              <tr><td>Plano Pro</td><td><code>radio</code></td><td><code>#plano_pro</code></td></tr>
+              <tr><td>Aceitar Termos</td><td><code>checkbox</code></td><td><code>#aceita_termos</code></td></tr>
+              <tr><td>Botão Cadastrar</td><td><code>button</code></td><td><code>#btn-cadastrar</code></td></tr>
+              <tr><td>Botão Auto-Fill Fake Data</td><td><code>button</code></td><td><code>#btn-fill-fake-data</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-modal-ok" class="btn btn-primary">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Principal -->
+  <script src="app.js"></script>
+</body>
+</html>
